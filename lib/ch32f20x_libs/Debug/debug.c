@@ -92,28 +92,27 @@ void Delay_Ms(u16 n)
 } 
 
 /*********************************************************************
- * @fn      fputc
+ * @fn      putchar_
  *
  * @brief   Support Printf Function 
  *
- * @param   data - UART send Data.
- *
- * @return  data - UART send Data.
+ * @param   c - UART send char.
  */
-int fputc(int data, FILE *f)
+void putchar_(char c)
 {
 #if (DEBUG == DEBUG_UART1)
   while (USART_GetFlagStatus(USART1, USART_FLAG_TC) == RESET);
-	USART_SendData(USART1, (u8) data);
+	USART_SendData(USART1, (u8) c);
 #elif (DEBUG == DEBUG_UART2)
   while (USART_GetFlagStatus(USART2, USART_FLAG_TC) == RESET);
-  USART_SendData(USART2, (u8) data);	
+  USART_SendData(USART2, (u8) c);	
 #elif (DEBUG == DEBUG_UART3)
   while (USART_GetFlagStatus(USART3, USART_FLAG_TC) == RESET);	
-  USART_SendData(USART3, (u8) data);	
+  USART_SendData(USART3, (u8) c);	
+#elif (DEBUG == DEBUG_UART4)
+  while (USART_GetFlagStatus(UART4, USART_FLAG_TC) == RESET);	
+  USART_SendData(UART4, (u8) c);	
 #endif
-	
-  return data;
 }
 
 /*********************************************************************

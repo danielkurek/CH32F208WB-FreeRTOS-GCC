@@ -1,18 +1,8 @@
-/********************************** (C) COPYRIGHT *******************************
-* File Name          : main.c
-* Author             : WCH
-* Version            : V1.0.0
-* Date               : 2021/08/08
-* Description        : Main program body.
-*********************************************************************************
-* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
-* Attention: This software (modified or not) and binary are used for 
-* microcontroller manufactured by Nanjing Qinheng Microelectronics.
-*******************************************************************************/
 #include "debug.h"
 #include "FreeRTOS.h"
 #include "task.h"
 #include "ch32f20x_iwdg.h"
+#include "printf/printf.h"
 
 
 /* Global define */
@@ -30,7 +20,7 @@ TaskHandle_t Task2Task_Handler;
 /*********************************************************************
  * @fn      GPIO_Toggle_INIT
  *
- * @brief   Initializes GPIOA.0/1
+ * @brief   Initializes GPIOA.1 and GPIOB.8
  *
  * @return  none
  */
@@ -70,7 +60,7 @@ void task1_task(void *pvParameters)
     while(1)
     {
         IWDG_ReloadCounter();
-        printf("task1 entry\r\n");
+        printf_("task1 entry\r\n");
         GPIO_SetBits(GPIOA, GPIO_Pin_1);
         vTaskDelay(msticks);
         GPIO_ResetBits(GPIOA, GPIO_Pin_1);
@@ -94,7 +84,7 @@ void task2_task(void *pvParameters)
     while(1)
     {
         IWDG_ReloadCounter();
-        printf("task2 entry\r\n");
+        printf_("task2 entry\r\n");
         GPIO_ResetBits(GPIOB, GPIO_Pin_8);
         vTaskDelay(msticks);
         GPIO_SetBits(GPIOB, GPIO_Pin_8);
@@ -124,9 +114,9 @@ int main(void)
     IWDG_ReloadCounter();
     SystemCoreClockUpdate();
     USART_Printf_Init(115200);
-    printf("SystemClk:%d\r\n",SystemCoreClock);
-    printf( "ChipID:%08x\r\n", DBGMCU_GetCHIPID() );
-    printf("FreeRTOS Kernel Version:%s\r\n",tskKERNEL_VERSION_NUMBER);
+    printf_("SystemClk:%d\r\n",SystemCoreClock);
+    printf_( "ChipID:%08x\r\n", DBGMCU_GetCHIPID() );
+    printf_("FreeRTOS Kernel Version:%s\r\n",tskKERNEL_VERSION_NUMBER);
     GPIO_Toggle_INIT();
     /* create two task */
     xTaskCreate((TaskFunction_t )task2_task,
@@ -146,7 +136,7 @@ int main(void)
 
     while(1)
     {
-        printf("shouldn't run at here!!\n");
+        printf_("shouldn't run at here!!\n");
     }
 }
 
